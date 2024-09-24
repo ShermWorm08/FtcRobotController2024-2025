@@ -46,27 +46,7 @@ import org.firstinspires.ftc.vision.apriltag.AprilTagDetection;
 import org.firstinspires.ftc.vision.apriltag.AprilTagProcessor;
 
 import java.util.List;
-
-/*
- * This OpMode illustrates the basics of AprilTag based localization.
- *
- * For an introduction to AprilTags, see the FTC-DOCS link below:
- * https://ftc-docs.firstinspires.org/en/latest/apriltag/vision_portal/apriltag_intro/apriltag-intro.html
- *
- * In this sample, any visible tag ID will be detected and displayed, but only tags that are included in the default
- * "TagLibrary" will be used to compute the robot's location and orientation.  This default TagLibrary contains
- * the current Season's AprilTags and a small set of "test Tags" in the high number range.
- *
- * When an AprilTag in the TagLibrary is detected, the SDK provides location and orientation of the robot, relative to the field origin.
- * This information is provided in the "robotPose" member of the returned "detection".
- *
- * To learn about the Field Coordinate System that is defined for FTC (and used by this OpMode), see the FTC-DOCS link below:
- * https://ftc-docs.firstinspires.org/en/latest/game_specific_resources/field_coordinate_system/field-coordinate-system.html
- *
- * Use Android Studio to Copy this Class, and Paste it into your team's code folder with a new name.
- * Remove or comment out the @Disabled line to add this OpMode to the Driver Station OpMode list.
- */
-@TeleOp(name = "Concept: AprilTag Localization", group = "Concept")
+@TeleOp(name = "AprilTagLoc", group = "Concept")
 public class AprilTagLocalization extends LinearOpMode {
 
     private static final boolean USE_WEBCAM = true;  // true for webcam, false for phone camera
@@ -122,6 +102,11 @@ public class AprilTagLocalization extends LinearOpMode {
         waitForStart();
 
         while (opModeIsActive()) {
+
+            if (gamepad1.a) {
+                resetValues();
+            }
+
 
             telemetryAprilTag();
 
@@ -212,10 +197,6 @@ public class AprilTagLocalization extends LinearOpMode {
         visionPortal.setProcessorEnabled(aprilTag, true);
 
     }   // end method initAprilTag()
-
-    /**
-     * Add telemetry about AprilTag detections.
-     */
     private void telemetryAprilTag() {
 
         List<AprilTagDetection> currentDetections = aprilTag.getDetections();
@@ -245,4 +226,9 @@ public class AprilTagLocalization extends LinearOpMode {
 
     }   // end method telemetryAprilTag()
 
-}   // end class
+    private void resetValues() {
+        cameraPosition = new Position(DistanceUnit.INCH, 0, 0, 0, 0);
+        cameraOrientation = new YawPitchRollAngles(AngleUnit.DEGREES, 0, -90, 0, 0);
+        telemetry.addLine("Values reset to zero.");
+    }
+}
